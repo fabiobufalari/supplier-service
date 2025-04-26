@@ -1,0 +1,22 @@
+# Path: src/test/resources/application-test.yml
+
+# Configure H2 in-memory database for tests
+# Configura banco de dados H2 em memória para testes
+spring:
+  datasource:
+    url: jdbc:h2:mem:supplierdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL # Use um nome único para o BD em memória
+    driverClassName: org.h2.Driver # Define explicitamente o driver H2
+    username: sa        # Usuário padrão do H2
+    password: password  # Senha padrão do H2 (ou deixe em branco)
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect # Dialeto H2
+    hibernate:
+      ddl-auto: create-drop # Cria o schema no início, dropa no fim do teste
+    # show-sql: true # Descomente para ver o SQL dos testes
+payable:
+  service:
+    url: http://localhost:9998
+# Opcional: Defina outras propriedades específicas de teste se necessário
+# logging:
+#   level:
+#     com.bufalari.supplier: TRACE # Mais logs durante testes
