@@ -1,81 +1,77 @@
 # =========================================
-# Server Configuration / Configuração do Servidor
+# Server Configuration
 # =========================================
 server:
-  port: 8087 # Porta para o supplier-service
+  port: 8087 # Porta deste serviço
 
 # =========================================
-# Spring Boot Application Configuration / Configuração da Aplicação Spring Boot
+# Spring Boot Application Configuration
 # =========================================
 spring:
   application:
-    name: supplier-service # Nome do serviço
-
-  # =========================================
-  # Datasource Configuration (PostgreSQL) / Configuração do Datasource (PostgreSQL)
-  # =========================================
+    name: supplier-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/supplierdb # <<<-- BD Dedicado (Recomendado)
+    url: jdbc:postgresql://localhost:5432/buildingDB # <<< BANCO CENTRALIZADO
     username: postgres
     password: postgres
-    # driver-class-name: org.postgresql.Driver # Opcional
-
-  # =========================================
-  # JPA & Hibernate Configuration / Configuração JPA & Hibernate
-  # =========================================
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update # CUIDADO em produção! Use 'validate' ou 'none'.
-    show-sql: true # Bom para desenvolvimento
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
-        # dialect: org.hibernate.dialect.PostgreSQLDialect # Opcional
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 # =========================================
-# External Service URLs / URLs de Serviços Externos
+# External Service URLs
 # =========================================
 auth:
   service:
-    # URL completa base do serviço de autenticação (incluindo context-path)
-    # Full base URL of the authentication service (including context-path)
-    url: ${AUTH_SERVICE_URL:http://localhost:8083/api} # <<<--- Verifique se bate com a config do auth-service
-
+    url: ${AUTH_SERVICE_URL:http://localhost:8083/api} # URL do Authentication Service
 payable:
   service:
-    # URL base do (futuro) serviço de contas a pagar
-    # Base URL of the (future) accounts payable service
-    url: ${PAYABLE_SERVICE_URL:http://localhost:8088} # <<<--- Defina uma porta para o payable-service
+    url: ${PAYABLE_SERVICE_URL:http://localhost:8088/api} # URL do Accounts Payable Service
 
 # =========================================
-# JWT Configuration / Configuração JWT
+# JWT Configuration (Este serviço VALIDA)
 # =========================================
-jwt:
-  # Chave secreta para validar tokens JWT (DEVE ser igual à usada pelo auth-service)
-  # Secret key for validating JWT tokens (MUST match the key used by auth-service)
-  # IMPORTANTE: Use variáveis de ambiente ou gerenciador de segredos em produção!
-  # IMPORTANT: Use environment variables or a secrets manager in production!
-  secret: ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970!} # <<<--- ADICIONADO/CONFIRMADO
+security:
+  jwt:
+    token:
+      secret-key: ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970!} # <<< CHAVE IDÊNTICA
 
 # =========================================
-# Logging Configuration (Example) / Configuração de Logging (Exemplo)
+# Logging Configuration
 # =========================================
 logging:
   level:
     org.springframework.web: INFO
-    org.springframework.security: INFO # Mude para DEBUG para ver detalhes da segurança
-    com.bufalari.supplier: DEBUG # Seu pacote
-    org.hibernate.SQL: DEBUG # Ver SQL gerado
-    # org.hibernate.type.descriptor.sql: TRACE # Ver parâmetros do SQL
+    org.springframework.security: INFO
+    com.bufalari.supplier: DEBUG # Pacote raiz deste serviço
+    org.hibernate.SQL: DEBUG
 
 # =========================================
-# Swagger/OpenAPI Configuration (Example) / Configuração Swagger/OpenAPI (Exemplo)
+# Swagger/OpenAPI Configuration
 # =========================================
 springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
-    path: /swagger-ui.html # Acesso à UI do Swagger
+    path: /swagger-ui.html
     operations-sorter: method
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+
+# =========================================
+# Actuator Configuration
+# =========================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: when_authorized

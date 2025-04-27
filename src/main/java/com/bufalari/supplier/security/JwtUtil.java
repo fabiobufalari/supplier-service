@@ -27,7 +27,7 @@ public class JwtUtil {
 
     // Inject the secret key from application properties using the CORRECT key name
     // Injeta a chave secreta das propriedades da aplicação usando o nome CORRETO da chave
-    @Value("${jwt.secret}") // <<<--- CORREÇÃO AQUI / FIX HERE
+    @Value("${jwt.secret}")
     private String configuredSecretKey;
 
     private SecretKey secretKey;
