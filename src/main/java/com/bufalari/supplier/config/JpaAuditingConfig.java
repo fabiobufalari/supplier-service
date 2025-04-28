@@ -1,30 +1,19 @@
-package com.bufalari.supplier.config;
+package com.bufalari.supplier.config; // Pacote correto
 
-import com.bufalari.supplier.auditing.AuditorAwareImpl;
+import com.bufalari.supplier.auditing.AuditorAwareImpl; // Import correto
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-/**
- * Configuration class to enable JPA Auditing for the Building service.
- * Classe de configuração para habilitar a Auditoria JPA para o serviço Building.
- */
 @Configuration
-// Garante que o 'auditorAwareRef' corresponda ao nome do bean (@Component) se você deu um nome específico
-// Ensures the 'auditorAwareRef' matches the bean name (@Component) if you gave it a specific name
-@EnableJpaAuditing(auditorAwareRef = "auditorProviderBuilding")
+// <<< AJUSTE: Usar ref específico para o serviço >>>
+@EnableJpaAuditing(auditorAwareRef = "auditorProviderSupplier")
 public class JpaAuditingConfig {
 
-    /**
-     * Provides the AuditorAware bean implementation.
-     * Fornece a implementação do bean AuditorAware.
-     *
-     * @return An instance of AuditorAware<String>.
-     *         Uma instância de AuditorAware<String>.
-     */
-    @Bean // O nome do método define o nome do bean padrão, mas @Component("...") tem precedência se usado
-    public AuditorAware<String> auditorProviderBuilding() { // Nome do bean/método correspondente
-        return new AuditorAwareImpl(); // Agora ele encontra a classe no pacote 'auditing'
+    @Bean
+    // <<< AJUSTE: Renomear o método/nome do bean >>>
+    public AuditorAware<String> auditorProviderSupplier() {
+        return new AuditorAwareImpl();
     }
 }
