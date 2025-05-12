@@ -1,4 +1,3 @@
-// Path: src/main/java/com/bufalari/supplier/entity/AddressEmbeddable.java
 package com.bufalari.supplier.entity;
 
 import jakarta.persistence.Column; // Import correct annotation
@@ -18,6 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressEmbeddable {
+	
 
     @Column(length = 255) // Define length constraints
     private String street;

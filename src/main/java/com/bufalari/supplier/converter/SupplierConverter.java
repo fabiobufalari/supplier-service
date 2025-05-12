@@ -1,22 +1,22 @@
-// Path: src/main/java/com/bufalari/supplier/converter/SupplierConverter.java
 package com.bufalari.supplier.converter;
 
 import com.bufalari.supplier.dto.SupplierDTO;
 import com.bufalari.supplier.entity.SupplierEntity;
-import lombok.RequiredArgsConstructor; // Use Lombok for constructor injection
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList; // Import for initializing list
+import java.util.ArrayList;
+import java.util.UUID; // Importar UUID se não estiver presente
 
 /**
  * Converts between SupplierEntity and SupplierDTO.
  * Converte entre SupplierEntity e SupplierDTO.
  */
 @Component
-@RequiredArgsConstructor // Automatically creates constructor for final fields
+@RequiredArgsConstructor
 public class SupplierConverter {
 
-    private final AddressConverter addressConverter; // Inject AddressConverter
+    private final AddressConverter addressConverter;
 
     /**
      * Converts SupplierEntity to SupplierDTO.
@@ -27,11 +27,11 @@ public class SupplierConverter {
             return null;
         }
         return SupplierDTO.builder()
-                .id(entity.getId())
+                .id(entity.getId()) // ID é UUID
                 .name(entity.getName())
                 .tradeName(entity.getTradeName())
                 .businessIdentificationNumber(entity.getBusinessIdentificationNumber())
-                .address(addressConverter.entityToDTO(entity.getAddress())) // Convert address
+                .address(addressConverter.entityToDTO(entity.getAddress()))
                 .primaryContactName(entity.getPrimaryContactName())
                 .primaryContactPhone(entity.getPrimaryContactPhone())
                 .primaryContactEmail(entity.getPrimaryContactEmail())
@@ -39,8 +39,6 @@ public class SupplierConverter {
                 .bankName(entity.getBankName())
                 .bankAgency(entity.getBankAgency())
                 .bankAccount(entity.getBankAccount())
-                // Return a copy of the list or an empty list if null
-                // Retorna uma cópia da lista ou uma lista vazia se for nulo
                 .documentReferences(entity.getDocumentReferences() != null ? new ArrayList<>(entity.getDocumentReferences()) : new ArrayList<>())
                 .build();
     }
@@ -53,12 +51,12 @@ public class SupplierConverter {
         if (dto == null) {
             return null;
         }
-        return SupplierEntity.builder()
-                .id(dto.getId()) // Keep ID for updates / Mantém ID para atualizações
+        SupplierEntity entity = SupplierEntity.builder()
+                // ID é UUID, não definir aqui para criação, ou usar o ID do DTO para atualização
                 .name(dto.getName())
                 .tradeName(dto.getTradeName())
                 .businessIdentificationNumber(dto.getBusinessIdentificationNumber())
-                .address(addressConverter.dtoToEntity(dto.getAddress())) // Convert address
+                .address(addressConverter.dtoToEntity(dto.getAddress()))
                 .primaryContactName(dto.getPrimaryContactName())
                 .primaryContactPhone(dto.getPrimaryContactPhone())
                 .primaryContactEmail(dto.getPrimaryContactEmail())
@@ -66,9 +64,13 @@ public class SupplierConverter {
                 .bankName(dto.getBankName())
                 .bankAgency(dto.getBankAgency())
                 .bankAccount(dto.getBankAccount())
-                 // Initialize with an empty list if DTO list is null
-                 // Inicializa com lista vazia se a lista do DTO for nula
                 .documentReferences(dto.getDocumentReferences() != null ? new ArrayList<>(dto.getDocumentReferences()) : new ArrayList<>())
                 .build();
+        
+        // Se o DTO tem um ID (para atualização), defina-o na entidade
+        if (dto.getId() != null) {
+            entity.setId(dto.getId());
+        }
+        return entity;
     }
 }

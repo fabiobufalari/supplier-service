@@ -5,13 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID; // <<<--- IMPORT UUID
 
 /**
  * Spring Data JPA repository for Supplier entities.
  * Repositório Spring Data JPA para entidades Supplier.
  */
 @Repository
-public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> {
+public interface SupplierRepository extends JpaRepository<SupplierEntity, UUID> { // <<<--- ALTERADO PARA UUID
 
     /**
      * Finds a supplier by its unique business identification number.
@@ -35,6 +36,5 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, Long> 
      * @param name The supplier name. / O nome do fornecedor.
      * @return true if exists, false otherwise. / true se existe, false caso contrário.
      */
-    boolean existsByNameIgnoreCase(String name); // Example of case-insensitive check
-
+    boolean existsByNameIgnoreCase(String name);
 }

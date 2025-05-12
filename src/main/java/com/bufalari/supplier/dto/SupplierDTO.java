@@ -1,7 +1,6 @@
-// Path: src/main/java/com/bufalari/supplier/dto/SupplierDTO.java
 package com.bufalari.supplier.dto;
 
-import jakarta.validation.Valid; // Import for validating nested DTOs
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,8 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema; // Para anotações do Swagger
 
 import java.util.List;
+import java.util.UUID; // <<<--- IMPORT UUID
 
 /**
  * DTO for Supplier data transfer. Includes validation rules.
@@ -23,49 +24,57 @@ import java.util.List;
 @Builder
 public class SupplierDTO {
 
-    private Long id; // Read-only in response / Somente leitura na resposta
+    @Schema(description = "Unique identifier of the supplier (UUID)", example = "d290f1ee-6c54-4b01-90e6-d701748f0851", accessMode = Schema.AccessMode.READ_ONLY)
+    private UUID id; // <<<--- TIPO ALTERADO PARA UUID
 
-
-    @Size(max = 200, message = "Supplier name max length is 200 characters / Nome do fornecedor: tamanho máx 200 caracteres")
+    @Size(max = 200, message = "{supplier.name.size}") // Ajustado para mensagem genérica de tamanho
     @NotBlank(message = "{supplier.name.notblank}")
+    @Schema(description = "Legal name of the supplier", example = "Constructora ABC Ltda.")
     private String name;
 
-    @Size(max = 200, message = "Trade name max length is 200 characters / Nome fantasia: tamanho máx 200 caracteres")
+    @Size(max = 200, message = "{supplier.tradename.size}")
+    @Schema(description = "Trading name of the supplier", example = "ABC Construções")
     private String tradeName;
 
-    @Size(max = 50, message = "Business ID max length is 50 characters / ID de negócio: tamanho máx 50 caracteres")
+    @Size(max = 50, message = "{supplier.businessid.size}")
     @NotBlank(message = "{supplier.businessid.notblank}")
+    @Schema(description = "Business Identification Number (e.g., CNPJ, EIN)", example = "12.345.678/0001-99")
     private String businessIdentificationNumber;
 
     @NotNull(message = "{supplier.address.notnull}")
     @Valid
+    @Schema(description = "Supplier's address details")
     private AddressDTO address;
 
-    @Size(max = 100, message = "Contact name max length is 100 characters / Nome do contato: tamanho máx 100 caracteres")
+    @Size(max = 100, message = "{supplier.contactname.size}")
+    @Schema(description = "Primary contact person's name", example = "João Silva")
     private String primaryContactName;
 
-    @Size(max = 30, message = "Contact phone max length is 30 characters / Telefone do contato: tamanho máx 30 caracteres")
+    @Size(max = 30, message = "{supplier.contactphone.size}")
+    @Schema(description = "Primary contact person's phone number", example = "+55 (11) 98765-4321")
     private String primaryContactPhone;
 
-    @Email(message = "Invalid contact email format / Formato de e-mail de contato inválido")
-    @Size(max = 100, message = "Contact email max length is 100 characters / E-mail do contato: tamanho máx 100 caracteres")
+    @Email(message = "{supplier.contactemail.invalid}")
+    @Size(max = 100, message = "{supplier.contactemail.size}")
+    @Schema(description = "Primary contact person's email", example = "contato@abcconstrucoes.com.br")
     private String primaryContactEmail;
 
-    @Size(max = 50, message = "Category max length is 50 characters / Categoria: tamanho máx 50 caracteres")
+    @Size(max = 50, message = "{supplier.category.size}")
+    @Schema(description = "Supplier category (e.g., MATERIAL, SERVICE)", example = "MATERIAL")
     private String category;
 
-    @Size(max = 100, message = "Bank name max length is 100 characters / Nome do banco: tamanho máx 100 caracteres")
+    @Size(max = 100, message = "{supplier.bankname.size}")
+    @Schema(description = "Supplier's bank name", example = "Banco XYZ")
     private String bankName;
 
-    @Size(max = 20, message = "Bank agency max length is 20 characters / Agência bancária: tamanho máx 20 caracteres")
+    @Size(max = 20, message = "{supplier.bankagency.size}")
+    @Schema(description = "Supplier's bank agency number", example = "0123")
     private String bankAgency;
 
-    @Size(max = 30, message = "Bank account max length is 30 characters / Conta bancária: tamanho máx 30 caracteres")
+    @Size(max = 30, message = "{supplier.bankaccount.size}")
+    @Schema(description = "Supplier's bank account number", example = "45678-9")
     private String bankAccount;
 
-    // List of document references (usually added/managed separately)
-    // Lista de referências de documentos (geralmente adicionada/gerenciada separadamente)
+    @Schema(description = "List of document references (URLs or identifiers)")
     private List<String> documentReferences;
-
-
 }
