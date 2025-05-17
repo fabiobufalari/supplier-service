@@ -33,7 +33,7 @@ import java.util.UUID; // <<<--- IMPORT UUID
  * Controlador REST para gerenciamento de fornecedores. Endpoints protegidos.
  */
 @RestController
-@RequestMapping("/api/suppliers")
+@RequestMapping("/supplier-service")
 @RequiredArgsConstructor
 @Tag(name = "Supplier Management", description = "Endpoints for managing suppliers / Endpoints para gerenciamento de fornecedores")
 @SecurityRequirement(name = "bearerAuth") // Aplica segurança JWT a todos os endpoints nesta classe
